@@ -6,13 +6,15 @@ mongoose.connect('mongodb+srv://admin-agata:Test1234@cluster0.goaewje.mongodb.ne
 const bodyParser = require("body-parser");
 const _ = require("lodash");
 const date = require(__dirname + "/date.js");
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static('public'));
+app.use('/images', express.static('images'));
 
 const today = date.getDate();
 
@@ -69,18 +71,19 @@ app.post("/delete", async function (req, res) {
 app.get("/", async function (req, res) {
 
   const foundItems = await Item.find({});
+  const customLists = await List.find({});
 
   if (foundItems.length === 0) {
     Item.insertMany(defaultItems);
     res.redirect("/");
   } else {
-    res.render("list", { listTitle: "today", newListItems: foundItems });
+    res.render("list", { listTitle: "Today", newListItems: foundItems, customLists: customLists, date: today });
   }
 });
 
 app.get("/:customListName", async function (req, res) {
+  const customLists = await List.find({});
   const customListName = _.capitalize(req.params.customListName);
-
   const checkList = await List.findOne({ name: customListName });
 
   if (!checkList) {
@@ -90,24 +93,34 @@ app.get("/:customListName", async function (req, res) {
     });
     await list.save();
     console.log("Its in if: " + list);
-    res.render("list", { listTitle: customListName, newListItems: defaultItems });
+    res.render("list", { listTitle: customListName, newListItems: defaultItems, customLists: customLists, date: today });
   } else {
-    res.render("list", { listTitle: customListName, newListItems: checkList.items });
+    res.render("list", { listTitle: customListName, newListItems: checkList.items, customLists: customLists, date: today });
     console.log("Its in else: " + checkList.items);
   }
+});
+
+app.post("/add-list", async function (req, res) {
+  const newList = new List({ name: req.body.newList });
+  const allLists = await List.find({});
+  const listsNames = allLists.forEach((list) => {
+    return list.name;
+  });
+  console.log("this is array of lists names: " + listsNames);
+  res.redirect("/" + newList.name);
 });
 
 app.post("/:customListName", async function (req, res) {
   const newItem = new Item({ name: req.body.newItem });
   const listName = req.body.listName;
   await newItem.save();
-  res.redirect("/:customListName", listName);
+  res.redirect("/" + listName);
 });
 
 app.get("/about", function (req, res) {
   res.render("about");
 });
 
-app.listen(3000, function () {
-  console.log("Server started on port 3000");
+app.listen(PORT, () => {
+  console.log(`server started on port ${PORT}`);
 });

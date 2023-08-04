@@ -1,25 +1,51 @@
 <%- include("header") -%>
+  <div id="triangle-bottomleft"></div>
+  <div id="triangle-bottomright"></div>
+    <div class="menu">
+      <a href="/" class="text-bold">Today</a>
+      <% customLists.forEach(function(list) { %>
+        <a href="/<%= list.name %>">
+          <% if (list.name===listTitle) { %>
+            <h4 class="currentList">
+              <%= list.name %>
+            </h4>
+            <% } else { %>
+              <h4>
+                <%= list.name %>
+              </h4>
+              <% } %>
+        </a>
+        <% }) %>
+    </div>
 
-  <div class="box" id="heading">
-    <h1> <%= listTitle %> </h1>
-  </div>
+    <img class="logo" src="android-chrome-512x512.png" alt="logo">
 
-  <div class="box">
-
-    <%  newListItems.forEach(function(item) { %>
-      <form action="/delete" method="post">
-        <div class="item">
-          <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
-          <p><%=  item.name  %></p>
-        </div>
-        <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+    <h3 class="date"><%= date %></h3>
+    <div class="box" id="heading">
+      <form action="/add-list" method="post">
+        <!-- <h1> <%= listTitle %> </h1> -->
+        <input type="text" name="newList" placeholder="New List" autocomplete="off" value="<%= listTitle %> ">
+        <button type="submit" name="addList" value="<%= listTitle %>">&#9998;</button>
       </form>
-    <% }) %>
+    </div>
 
-      <form class="item" action="/" method="post">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
-        <button type="submit" name="list" value="<%= listTitle %>">+</button>
-      </form>
-  </div>
+    <div class="box">
 
-<%- include("footer") -%>
+      <% newListItems.forEach(function(item) { %>
+        <form action="/delete" method="post">
+          <div class="item">
+            <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
+            <p>
+              <%= item.name %>
+            </p>
+          </div>
+          <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+        </form>
+        <% }) %>
+
+          <form class="item" action="/" method="post">
+            <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+            <button type="submit" name="list" value="<%= listTitle %>">+</button>
+          </form>
+    </div>
+  <%- include("footer") -%>
