@@ -60,7 +60,6 @@ app.get("/", async (req, res) => {
 
 app.get("/:customListName", async (req, res) => {
   const listName = _.capitalize(req.params.customListName);
-  console.log(listName);
   try {
     let customLists = await List.find({});
     const checkList = await List.findOne({ name: listName });
@@ -132,7 +131,6 @@ app.post("/", async (req, res) => {
 app.post("/delete", async (req, res) => {
   const checkboxItemID = req.body.checkbox;
   const listName = req.body.listName;
-  console.log("List name from hidden input: " + listName);
   if (listName === "today") {
     await Item.findByIdAndRemove(checkboxItemID);
     res.redirect("/");
