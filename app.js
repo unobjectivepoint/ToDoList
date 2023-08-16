@@ -4,10 +4,6 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import _ from "lodash";
-import alert from "alert";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-const __dirname = dirname(fileURLToPath(import.meta.url));
 import { getDate } from "./date.js";
 
 const PORT = process.env.PORT || 3000;
@@ -82,20 +78,6 @@ app.get("/:customListName", async (req, res) => {
       customLists = await List.find({});
       res.render("list", { listTitle: listName, newListItems: defaultItems, customLists: customLists, date: today });
     }
-
-    // if (!checkList) {
-    //   const list = new List({
-    //     name: listName,
-    //     items: defaultItems
-    //   });
-    //   await list.save();
-    //   customLists = await List.find({});
-    //   res.render("list", { listTitle: listName, newListItems: defaultItems, customLists: customLists, date: today });
-    // } else if (checkList) {
-    //   res.render("list", { listTitle: checkList.name, newListItems: checkList.items, customLists: customLists, date: today });
-    // } else if (listName === "About") {
-    //   res.render("about");
-    // }
   } catch (error) {
     console.log(error);
   }
@@ -103,7 +85,6 @@ app.get("/:customListName", async (req, res) => {
 
 app.post("/add-list", (req, res) => {
   const newListName = _.capitalize(req.body.newList).trim();
-  console.log(newListName);
   if (newListName === "Today") {
     res.redirect("/");
   } else {
@@ -114,20 +95,15 @@ app.post("/add-list", (req, res) => {
 app.post("/", async (req, res) => {
   const itemName = req.body.newItem;
   const listName = req.body.list;
-  console.log("list name è: " + listName);
-  // Check if itemName is not an empty string
   if (itemName.trim() !== '') {
-    // Create a new item based on the input
     const item = new Item({
       name: itemName,
     });
 
     if (listName === "Today") {
-      // Save the item to the default collection
       item.save();
       res.redirect("/");
     } else {
-      // Find the custom list and push the new item
       List.findOne({ name: listName })
         .then((foundItems) => {
           foundItems.items.push(item);

@@ -1,5 +1,3 @@
-//jshint esversion:6
-
 export function getDate() {
 
   const today = new Date();
