@@ -1,11 +1,24 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   background-color: #E4E9FD;
   font-family: 'Montserrat', sans-serif;
-  background-repeat: no-repeat;
 }
 
 body {
   margin: 0;
+}
+
+.bg-wrapper {
+  position: fixed;
+  bottom: auto;
+  width: 100vw;
+  height: 100vh;
+  z-index: -99999;
 }
 
 #triangle-bottomleft {
@@ -42,11 +55,12 @@ h1 {
 
 .date {
   text-align: center;
-  color: white;
+  color: #00204a;
+  opacity: 0.5;
 }
 
 .logo {
-  width: 20%;
+  width: 15%;
   height: auto;
   position: absolute;
   right: 20px;
@@ -56,8 +70,8 @@ h1 {
 }
 
 .box {
-  max-width: 400px;
-  margin: 50px auto;
+  max-width: 90%;
+  margin: 20px auto;
   background: white;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
@@ -152,7 +166,7 @@ input[type="text"] {
   background: transparent;
   font-size: 20px;
   font-weight: 200;
-  width: 313px;
+  width: 80%;
 }
 
 input[type="text"]:focus {
@@ -195,8 +209,75 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+  margin: 20px;
 }
 
-@media (min-width: px) {
-  /* … */
+.regular-link {
+  color: #00204a;
+  text-decoration: underline;
+}
+
+.about {
+  margin: 20px;
+}
+
+.about h2 {
+  color: #0f915b;
+  display: inline-block;
+}
+
+.about ul li {
+  font-size: 20px;
+  font-weight: bold;
+  color:#00204a;
+}
+
+.about a {
+  display: inline-block;
+  font-size: 18px;
+  padding: 0;
+}
+
+.about p {
+  padding: 0;
+}
+
+.login {
+  text-align: center;
+}
+
+.login input {
+  border: 1px solid #2ba980;
+  border-radius: 5px;
+  height: auto;
+  height: 40px;
+  text-align: left;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.login form div {
+  margin: 20px;
+  text-align: left;
+}
+
+.login label {
+  margin-left: 15px;
+}
+
+.login-button {
+  border-radius: 5px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+
+/* This applies from 600px onwards */
+@media (min-width: 600px) {
+  .box {
+    max-width: 400px;
+  }
+  .about {
+    margin: 50px 15%;
+  }
 }

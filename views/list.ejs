@@ -1,51 +1,65 @@
 <%- include("header") -%>
-  <div id="triangle-bottomleft"></div>
-  <div id="triangle-bottomright"></div>
-    <div class="menu">
-      <a href="/" class="text-bold">Today</a>
-      <% customLists.forEach(function(list) { %>
-        <a href="/<%= list.name %>">
-          <% if (list.name===listTitle) { %>
-            <h4 class="currentList">
+
+  <div class="bg-wrapper">
+    <div id="triangle-bottomleft"></div>
+    <div id="triangle-bottomright"></div>
+  </div>
+  <div class="menu">
+    <a href="/">
+      <% if (listTitle==="Today" ) { %>
+        <h4 class="currentList">Today</h4>
+        <% } else { %>
+          <h4>Today</h4>
+          <% } %>
+    </a>
+    <% customLists.forEach(function(list) { %>
+      <a href="/<%= list.name %>">
+        <% if (list.name===listTitle) { %>
+          <h4 class="currentList">
+            <%= list.name %>
+          </h4>
+          <% } else { %>
+            <h4>
               <%= list.name %>
             </h4>
-            <% } else { %>
-              <h4>
-                <%= list.name %>
-              </h4>
-              <% } %>
-        </a>
-        <% }) %>
+            <% } %>
+      </a>
+      <% }) %>
+        <a href="/about">About</a>
+  </div>
+
+  <img class="logo" src="android-chrome-512x512.png" alt="logo">
+
+  <h3 class="date">
+    <%= date %>
+  </h3>
+  <div class="box" id="heading">
+    <form action="/add-list" method="post">
+      <div class="item">
+      <input type="text" name="newList" placeholder="New List" autocomplete="off" value="<%= listTitle %> ">
+      <button type="submit" name="addList" value="<%= listTitle %>">&#9998;</button>
     </div>
+    </form>
+  </div>
 
-    <img class="logo" src="android-chrome-512x512.png" alt="logo">
-
-    <h3 class="date"><%= date %></h3>
-    <div class="box" id="heading">
-      <form action="/add-list" method="post">
-        <!-- <h1> <%= listTitle %> </h1> -->
-        <input type="text" name="newList" placeholder="New List" autocomplete="off" value="<%= listTitle %> ">
-        <button type="submit" name="addList" value="<%= listTitle %>">&#9998;</button>
+  <div class="box">
+    <% newListItems.forEach(function(item) { %>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
+          <p>
+            <%= item.name %>
+          </p>
+        </div>
+        <input type="hidden" name="listName" value="<%= listTitle %>"></input>
       </form>
-    </div>
+      <% }) %>
 
-    <div class="box">
-
-      <% newListItems.forEach(function(item) { %>
-        <form action="/delete" method="post">
+        <form action="/" method="post">
           <div class="item">
-            <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
-            <p>
-              <%= item.name %>
-            </p>
-          </div>
-          <input type="hidden" name="listName" value="<%= listTitle %>"></input>
-        </form>
-        <% }) %>
-
-          <form class="item" action="/" method="post">
             <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
             <button type="submit" name="list" value="<%= listTitle %>">+</button>
-          </form>
-    </div>
+          </div>
+        </form>
+  </div>
   <%- include("footer") -%>
