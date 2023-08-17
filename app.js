@@ -66,6 +66,8 @@ app.get("/:customListName", async (req, res) => {
 
     if (listName === "About" && !checkList) {
       res.render("about");
+    } else if (listName === "Today") {
+      res.redirect("/");
     } else if (checkList) {
       res.render("list", { listTitle: checkList.name, newListItems: checkList.items, customLists: customLists, date: today });
     } else if (!checkList) {
@@ -76,7 +78,7 @@ app.get("/:customListName", async (req, res) => {
       await list.save();
       customLists = await List.find({});
       res.render("list", { listTitle: listName, newListItems: defaultItems, customLists: customLists, date: today });
-    }
+    } 
   } catch (error) {
     console.log(error);
   }
@@ -131,11 +133,13 @@ app.post("/", async (req, res) => {
 app.post("/delete", async (req, res) => {
   const checkboxItemID = req.body.checkbox;
   const listName = req.body.listName;
-  if (listName === "today") {
+  if (listName === "Today") {
     await Item.findByIdAndRemove(checkboxItemID);
+    console.log("Entro nel if");
     res.redirect("/");
   } else {
     await List.findOneAndUpdate({ name: listName }, { $pull: { items: { _id: checkboxItemID } } });
+    console.log("Entro nel else");
     res.redirect("/" + listName);
   }
 });
